@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Will you be my Valentine?</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: #fde0dc;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    #question {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #c2185b;
+    }
+    #image {
+      display: none;
+      width: 200px;
+      height: auto;
+      margin-top: 20px;
+    }
+    #buttons {
+      margin-top: 20px;
+    }
+    button {
+      font-size: 16px;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 20px;
+      border: none;
+      margin: 0 10px;
+    }
+    #yesButton {
+      background-color: #4CAF50;
+      color: white;
+    }
+    #noButton {
+      background-color: #f44336;
+      color: white;
+    }
+    #loveMessage {
+      display: none;
+      font-size: 36px;
+      margin-top: 50px;
+      color: #c2185b;
+      text-align: center;
+    }
+    #dance {
+      display: none;
+      text-align: center;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+</head>
+<body>
+  <div id="question">Will you be my Valentine?</div>
+  <img id="image" src="sad.webp" alt="Cute Valentine's image">
+  <div id="buttons">
+    <button id="yesButton" onclick="showLove()">Yes</button>
+    <button id="noButton" >No</button>
+  </div>
+  <img id="dance" src="dance.gif" alt="Cute Valentine's image">
+  <div id="loveMessage">I KNEW YOU'LL SAY YES!<br/>I LOVE YOU</div>
+
+  <script>
+    let noButton = document.getElementById("noButton");
+    let yesButton = document.getElementById("yesButton");
+    let loveMessage = document.getElementById("loveMessage");
+    let image = document.getElementById("image");
+    let dance = document.getElementById('dance');
+    let noButtonClickCount = 0;
+
+    noButton.onclick = function() {
+      moveNoButton();
+      showImage();
+      noButtonClickCount++;
+      if (noButtonClickCount < 20) {
+        increaseYesButtonSize();
+      } else {
+        noButton.style.display = "none"; // Hide the "No" button after 20 clicks
+      }
+    };
+
+    function moveNoButton() {
+      let maxX = window.innerWidth - noButton.offsetWidth;
+      let maxY = window.innerHeight - noButton.offsetHeight;
+      let newX = Math.floor(Math.random() * maxX);
+      let newY = Math.floor(Math.random() * maxY);
+      
+      noButton.style.position = "absolute";
+      noButton.style.left = newX + "px";
+      noButton.style.top = newY + "px";
+    }
+
+    function increaseYesButtonSize() {
+      let currentSize = parseInt(window.getComputedStyle(yesButton).getPropertyValue('font-size'));
+      yesButton.style.fontSize = (currentSize + 2) + 'px';
+    }
+
+    function showImage() {
+        console.log("yes")
+      // Show the image below the text
+      document.getElementById("image").style.display = "block";
+    }
+
+    function showLove() {
+      // Hide all elements except the love message
+      document.getElementById("question").style.display = "none";
+      document.getElementById("buttons").style.display = "none";
+      image.style.display = "none";
+      dance.style.display = "block";
+      loveMessage.style.display = "block";
+
+      const duration = 15 * 1000,
+  animationEnd = Date.now() + duration,
+  defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+function randomInRange(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+const interval = setInterval(function() {
+  const timeLeft = animationEnd - Date.now();
+
+  if (timeLeft <= 0) {
+    return clearInterval(interval);
+  }
+
+  const particleCount = 50 * (timeLeft / duration);
+
+  // since particles fall down, start a bit higher than random
+  confetti(
+    Object.assign({}, defaults, {
+      particleCount,
+      origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+    })
+  );
+  confetti(
+    Object.assign({}, defaults, {
+      particleCount,
+      origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+    })
+  );
+}, 250);
+    }
+  </script>
+</body>
+</html>
